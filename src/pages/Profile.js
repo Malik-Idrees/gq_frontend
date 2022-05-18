@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import UserCard from '../components/UserCard'
 
 const Profile = () => {
     const [profession, setProfession] = useState('')
@@ -7,12 +8,13 @@ const Profile = () => {
     const [dailyTime, setdailyTime] = useState('')
 
     return (
-        <div className='dark:text-gray-50'>
+        <div className='dark:text-gray-50 max-w-4xl mx-auto'>
+            <UserCard />
             <span className='text-xl font-medium whitespace-nowrap dark:text-white'>
                 User Profile
             </span>
             <form>
-                <div className='grid xl:grid-cols-2 xl:gap-6'>
+                <div className='grid lg:grid-cols-2 lg:gap-6'>
                     <div className='relative z-0 w-full mb-6 group'>
                         <input
                             type='text'
@@ -50,7 +52,7 @@ const Profile = () => {
                         </label>
                     </div>
                 </div>
-                <div className='grid xl:grid-cols-2 xl:gap-6'>
+                <div className='grid lg:grid-cols-2 lg:gap-6'>
                     <div className='relative z-0 w-full mb-6 group'>
                         <input
                             type='tel'
