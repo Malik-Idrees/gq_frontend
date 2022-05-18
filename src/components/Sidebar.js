@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
+import { HamburgerButton } from './HamburgerMenuButton'
+
 import { BsArrowLeftCircle } from 'react-icons/bs'
 import { AiFillPieChart } from 'react-icons/ai'
 import { SiFuturelearn } from 'react-icons/si'
@@ -10,6 +12,7 @@ import Logo from '../assets/images/logo.svg'
 
 const Sidebar = () => {
     const [open, setOpen] = useState(false)
+    const [mobileMenu, setMobileMenu] = useState(false)
     const location = useLocation()
 
     const Menus = [
@@ -65,6 +68,29 @@ const Sidebar = () => {
                         </Link>
                     ))}
                 </ul>
+            </div>
+
+            <HamburgerButton setMobileMenu={setMobileMenu} mobileMenu={mobileMenu} />
+            {/* Mobile Menu  */}
+            <div className='sm:hidden'>
+                <div
+                    className={`${
+                        mobileMenu ? 'flex' : 'hidden'
+                    } absolute z-50 flex-col items-center self-end py-8 mt-16 space-y-6 font-bold bg-gray-50 sm:w-auto left-6 right-6 drop-shadow md`}
+                >
+                    {Menus.map((menu, index) => (
+                        <Link to={menu.path} key={index} onClick={() => setMobileMenu(false)}>
+                            <span
+                                className={` ${
+                                    location.pathname === menu.path &&
+                                    'bg-gray-200 dark:bg-gray-700 p-2 rounded-xl'
+                                }`}
+                            >
+                                {menu.title}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </>
     )

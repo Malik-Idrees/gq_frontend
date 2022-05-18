@@ -11,7 +11,7 @@ const Navbar = () => {
                     </span>
                 </div>
 
-                <div className='flex justify-end pr-4 pt-4'>
+                <div className='flex justify-end pr-4'>
                     <Toggle />
                 </div>
             </div>
