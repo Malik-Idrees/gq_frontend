@@ -1,13 +1,35 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    // const handleInput = (e) => {
-    //     console.log(e.target.name)
-    // }
+    let navigate = useNavigate()
+
+    const loginUser = async (email, password) => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+
+            const { data } = await axios.post('/api/user/login/', { email, password }, config)
+
+            console.log(data)
+            localStorage.setItem('userInfo', JSON.stringify(data))
+            navigate('/profile')
+        } catch (error) {
+            console.log(error.response.data)
+        }
+    }
+
+    const submitHandler = async (e) => {
+        // e.preventDefault()
+        await loginUser(email, password)
+    }
 
     return (
         <section className='lg:pt-10'>
@@ -133,6 +155,7 @@ const Login = () => {
                             <div className='text-center lg:text-left'>
                                 <button
                                     type='button'
+                                    onClick={submitHandler}
                                     className='inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
                                 >
                                     Login

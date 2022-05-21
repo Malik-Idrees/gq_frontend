@@ -1,13 +1,42 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Register = () => {
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    // const handleInput = (e) => {
-    //     console.log(e.target.name)
-    // }
+    let navigate = useNavigate()
+
+    const registerUser = async (username, email, password) => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+
+            const { data } = await axios.post(
+                '/api/user/signup/',
+                { username, email, password },
+                config
+            )
+
+            console.log('response:')
+            console.log(data)
+            localStorage.setItem('userInfo', JSON.stringify(data))
+            navigate('/profile')
+        } catch (error) {
+            console.log('error')
+            console.log(error.response.data)
+        }
+    }
+
+    const submitHandler = async (e) => {
+        // e.preventDefault()
+        await registerUser(username, email, password)
+    }
 
     return (
         <section className='lg:pt-10'>
@@ -79,6 +108,18 @@ const Register = () => {
                                     Or
                                 </p>
                             </div>
+                            {/* Username input */}
+                            <div className='mb-6'>
+                                <input
+                                    className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+                                    type='text'
+                                    value={username}
+                                    name='username'
+                                    id='username'
+                                    placeholder='username...'
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                            </div>
                             {/* Email input */}
                             <div className='mb-6'>
                                 <input
@@ -126,6 +167,7 @@ const Register = () => {
                             <div className='text-center lg:text-left'>
                                 <button
                                     type='button'
+                                    onClick={submitHandler}
                                     className='inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
                                 >
                                     Register

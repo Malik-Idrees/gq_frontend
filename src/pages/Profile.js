@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
 import UserCard from '../components/UserCard'
 
 const Profile = () => {
@@ -7,10 +10,48 @@ const Profile = () => {
     const [expertiseLevel, setexpertiseLevel] = useState('')
     const [dailyTime, setdailyTime] = useState('')
 
+    let navigate = useNavigate()
+
+    const createUserProfile = async (profession, goalToAchieve, expertiseLevel, dailyTime) => {
+        const userInfoFromStorage = localStorage.getItem('userInfo')
+            ? JSON.parse(localStorage.getItem('userInfo'))
+            : null
+
+        const token = userInfoFromStorage?.access || ''
+
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+
+            const { data } = await axios.post(
+                '/api/profile/',
+                { profession, goalToAchieve, expertiseLevel, dailyTime },
+                config
+            )
+
+            console.log('response')
+            console.log(data)
+            localStorage.setItem('profileInfo', JSON.stringify(data))
+            navigate('/dashboard')
+        } catch (error) {
+            console.log('error')
+            console.log(error.response.data)
+        }
+    }
+
+    const submitHandler = async (e) => {
+        e.preventDefault()
+        await createUserProfile(profession, goalToAchieve, expertiseLevel, dailyTime)
+    }
+
     return (
         <div className='dark:text-gray-50 max-w-4xl mx-auto'>
             <UserCard />
-            <span className='text-xl font-medium whitespace-nowrap dark:text-white'>
+            <span className='block text-xl font-medium mb-2 whitespace-nowrap dark:text-white'>
                 User Profile
             </span>
             <form>
@@ -36,7 +77,7 @@ const Profile = () => {
                     <div className='relative z-0 w-full mb-6 group'>
                         <input
                             type='text'
-                            name='profession'
+                            name='goalToAchieve'
                             id='user_profession'
                             value={goalToAchieve}
                             className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
@@ -55,8 +96,8 @@ const Profile = () => {
                 <div className='grid lg:grid-cols-2 lg:gap-6'>
                     <div className='relative z-0 w-full mb-6 group'>
                         <input
-                            type='tel'
-                            pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}'
+                            type='text'
+                            // pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}'
                             name='expertiseLevel'
                             id='user_expertise'
                             value={expertiseLevel}
@@ -75,7 +116,7 @@ const Profile = () => {
                     <div className='relative z-0 w-full mb-6 group'>
                         <input
                             type='text'
-                            name='floating_company'
+                            name='dailyTime'
                             id='user_daily_time_hrs'
                             value={dailyTime}
                             className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
@@ -93,6 +134,7 @@ const Profile = () => {
                 </div>
                 <button
                     type='submit'
+                    onClick={submitHandler}
                     className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
                 >
                     Submit
