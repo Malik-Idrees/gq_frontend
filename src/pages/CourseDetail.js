@@ -5,6 +5,8 @@ import Layout from '../components/Layout'
 
 const CourseDetail = () => {
     const [courseDetail, setCourseDetail] = useState()
+    const [progress, setProgress] = useState(0)
+    const [current, setCurrent] = useState(0)
 
     let { courseId } = useParams()
     console.log(courseId)
@@ -15,6 +17,21 @@ const CourseDetail = () => {
 
     const token = userInfoFromStorage?.access || ''
 
+    const getProgress = (data) => {
+        let check = true
+        let countCompleted = 0
+        const total = data.length
+        data.forEach((x, i) => {
+            if (x.videos[0].watched == true) {
+                countCompleted += 1
+            } else if (check == true && x.videos[0].watched == false) {
+                check = false
+                setCurrent(i)
+            }
+        })
+        const prcntage = Math.ceil((countCompleted / total) * 100)
+        return prcntage
+    }
     useEffect(() => {
         const fetchCourseDetail = async () => {
             const config = {
@@ -25,6 +42,7 @@ const CourseDetail = () => {
             }
             const { data } = await axios.get(`/api/course/${courseId}`, config)
             setCourseDetail(data)
+            setProgress(getProgress(data))
         }
 
         fetchCourseDetail()
@@ -33,39 +51,112 @@ const CourseDetail = () => {
     return (
         <Layout>
             <div className='container'>
+                <div>
+                    <p className='text-base font-semibold text-gray-800 mb-1'>Course Progress</p>
+                    <div class='w-full bg-gray-200 rounded-full dark:bg-gray-700'>
+                        <div
+                            class='bg-green-600 text-white text-base font-medium text-center p-0.5 leading-none rounded-full'
+                            style={{ width: `${progress}%` }}
+                        >
+                            {progress}%
+                        </div>
+                    </div>
+                </div>
+                <br />
                 {courseDetail &&
-                    courseDetail.map((x) => (
-                        <VideoComponent
-                            key={x.id}
-                            // title={x.videos[0].title}
-                            title={x.title}
-                            href={x.videos[0].href.split('=')[1]}
-                        />
+                    courseDetail.map((x, i) => {
+                        if (i == current) {
+                            return (
+                                <VideoComponent
+                                    key={x.id}
+                                    title={x.title}
+                                    href={x.videos[0].href.split('=')[1]}
+                                    videoId={x.videos[0].id}
+                                    watched={x.videos[0].watched}
+                                    token={token}
+                                    index={i}
+                                    current={true}
+                                />
+                            )
+                        } else {
+                            return (
+                                <VideoComponent
+                                    key={x.id}
+                                    title={x.title}
+                                    href={x.videos[0].href.split('=')[1]}
+                                    videoId={x.videos[0].id}
+                                    watched={x.videos[0].watched}
+                                    token={token}
+                                    index={i}
+                                    current={false}
+                                />
+                            )
+                        }
                         // console.log(x.links[0].title)
                         // console.log(x.links[1].title)
-                    ))}
+                    })}
             </div>
         </Layout>
     )
 }
 
-const VideoComponent = ({ title, href }) => {
+const VideoComponent = ({ title, href, videoId, watched, token, index, current }) => {
     const [show, setShow] = useState(false)
+    const [tick, setTick] = useState(false)
+
+    const updateVideo = async (id) => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+
+            const { data } = await axios.post(`/api/videos/${id}`, {}, config)
+        } catch (error) {
+            console.log(error.response.data)
+        }
+    }
+
+    const videoHandler = async (id) => {
+        await updateVideo(id)
+    }
+
+    useEffect(() => {
+        {
+            current && setShow(true)
+        }
+    }, [])
 
     return (
         <>
-            <div className='flex max-w-xl mx-4 my-3'>
-                <button
-                    onClick={() => setShow(!show)}
-                    className='w-full rounded px-4 py-3 text-sm focus:outline-none bg-cyan-400'
-                    type='button'
-                >
-                    {title}
-                </button>
-                <img src='../assets/images/check-mark.png' alt='Done' className='mt-2 ml-2' />
+            <div className='flex '>
+                <div className='flex w-1/2 mx-4 my-3'>
+                    <button
+                        onClick={() => setShow(!show)}
+                        className='w-full rounded px-4 py-3 text-base focus:outline-none bg-blue-600 text-white'
+                        type='button'
+                    >
+                        {`${index + 1}.  ${title}`}
+                    </button>
+                </div>
+                <div>
+                    {(watched || tick) && (
+                        <img
+                            src='../assets/images/check-mark.png'
+                            alt='Done'
+                            className='mt-2 ml-2'
+                        />
+                    )}
+                </div>
             </div>
 
-            <div className={`${show ? 'flex' : 'hidden'} flex-row items-start mt-3`}>
+            <div
+                className={`
+                ${show ? 'flex' : 'hidden'}  
+                flex-row items-start mt-3`}
+            >
                 <div>
                     <div x-show='show' className='border px-4 py-3 my-2 text-gray-700'>
                         <iframe
@@ -100,11 +191,13 @@ const VideoComponent = ({ title, href }) => {
                             </div>
 
                             <div>
-                                <label className='checkbox-wrapper cursor-pointer inline-flex items-center completed-btn px-6 py-3 text-sm'>
-                                    <input
-                                        type='checkbox'
-                                        className='form-checkbox text-white-600'
-                                    />
+                                <label
+                                    onClick={() => {
+                                        setTick(true)
+                                        videoHandler(videoId)
+                                    }}
+                                    className='checkbox-wrapper cursor-pointer inline-flex items-center completed-btn px-6 py-3 text-sm'
+                                >
                                     <span className='ml-2'>Mark as completed</span>
                                 </label>
                             </div>
