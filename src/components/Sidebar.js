@@ -11,12 +11,12 @@ import { CgProfile } from 'react-icons/cg'
 import Logo from '../assets/images/logo.svg'
 
 const Sidebar = () => {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
     const [mobileMenu, setMobileMenu] = useState(false)
     const location = useLocation()
 
     const Menus = [
-        { title: 'Dashboard', path: '/dashboard', src: <AiFillPieChart /> },
+        // { title: 'Dashboard', path: '/dashboard', src: <AiFillPieChart /> },
         { title: 'Course', path: '/course', src: <SiFuturelearn /> },
         { title: 'Profile', path: '/profile', src: <CgProfile /> },
         { title: 'logout', path: '/', src: <SiOpenaccess />, gap: 'true' },
