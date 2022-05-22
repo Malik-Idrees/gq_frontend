@@ -40,7 +40,7 @@ const Profile = () => {
             console.log('response')
             console.log(data)
             localStorage.setItem('profileInfo', JSON.stringify(data))
-            navigate('/dashboard')
+            navigate('/course')
         } catch (error) {
             console.log('error')
             console.log(error.response.data)
