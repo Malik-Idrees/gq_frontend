@@ -6,6 +6,7 @@ import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import LandingPage from './pages/LandingPage'
+import CourseDetail from './pages/CourseDetail'
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
             <Routes>
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/course' element={<Course />} />
+                <Route path='/course/:courseId' element={<CourseDetail />} />
                 <Route path='/profile' element={<Profile />} />
             </Routes>
         </BrowserRouter>
