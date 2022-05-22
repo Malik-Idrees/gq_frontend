@@ -174,7 +174,7 @@ const Register = () => {
                                 </button>
                                 <p className='text-sm font-semibold pt-2 mt-2 mb-0 dark:text-white'>
                                     Don't have an account?
-                                    <Link to='/login'>
+                                    <Link to='/'>
                                         <span className='text-white px-6 py-1.5 rounded hover:scale-110 transition duration-200 ease-in-out ml-3 bg-red-700 dark:bg-red-700 dark:text-white'>
                                             Login
                                         </span>

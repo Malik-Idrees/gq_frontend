@@ -20,7 +20,7 @@ const Login = () => {
 
             console.log(data)
             localStorage.setItem('userInfo', JSON.stringify(data))
-            navigate('/profile')
+            navigate('/course')
         } catch (error) {
             console.log(error.response.data)
         }

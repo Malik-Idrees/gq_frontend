@@ -19,7 +19,7 @@ const Sidebar = () => {
         { title: 'Dashboard', path: '/dashboard', src: <AiFillPieChart /> },
         { title: 'Course', path: '/course', src: <SiFuturelearn /> },
         { title: 'Profile', path: '/profile', src: <CgProfile /> },
-        { title: 'Signin', path: '/login', src: <SiOpenaccess />, gap: 'true' },
+        { title: 'logout', path: '/', src: <SiOpenaccess />, gap: 'true' },
     ]
 
     return (
@@ -35,7 +35,7 @@ const Sidebar = () => {
                     } absolute text-3xl bg-white fill-slate-800  rounded-full cursor-pointer top-9 -right-4 dark:fill-gray-400 dark:bg-gray-800`}
                     onClick={() => setOpen(!open)}
                 />
-                <Link to='/'>
+                <Link to='/back-home'>
                     <div className={`flex ${open && 'gap-x-4'} items-center`}>
                         <img src={Logo} alt='' className='pl-2' />
                         {open && (

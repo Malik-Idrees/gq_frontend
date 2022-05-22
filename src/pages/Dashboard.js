@@ -7,9 +7,11 @@ import CardBarChart from '../components/Cards/CardBarChart'
 import CardPageVisits from '../components/Cards/CardPageVisits'
 import CardSocialTraffic from '../components/Cards/CardSocialTraffic'
 
+import Layout from '../components/Layout'
+
 const Dashboard = () => {
     return (
-        <>
+        <Layout>
             <span className='text-xl p-4 mb-5 font-medium whitespace-nowrap dark:text-white'>
                 Dashboard
             </span>
@@ -30,7 +32,7 @@ const Dashboard = () => {
                     <CardSocialTraffic />
                 </div>
             </div>
-        </>
+        </Layout>
     )
 }
 
