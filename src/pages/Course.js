@@ -8,6 +8,8 @@ const Course = () => {
     const [course, setCourse] = useState([])
     const [modal, setModal] = useState(false)
 
+    const [alert, setAlert] = useState(false)
+
     const [jobRequired, setJobRequired] = useState(true)
     const [goalToAchieve, setGoalToAchieve] = useState('')
     const [expertiseLevel, setexpertiseLevel] = useState('')
@@ -41,6 +43,10 @@ const Course = () => {
     const submitHandler = async (e) => {
         e.preventDefault()
         setModal(false)
+        setAlert(true)
+        setTimeout(() => {
+            setAlert(false)
+        }, 5000)
         await createUserCourse(jobRequired, goalToAchieve, expertiseLevel, dailyTime)
     }
 
@@ -62,6 +68,16 @@ const Course = () => {
     return (
         <Layout>
             <section id='work' className='work_area'>
+                {alert && (
+                    <div
+                        class='p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800'
+                        role='alert'
+                    >
+                        <span class='font-medium'>
+                            Please hold on! This will take a couple of minutes ...
+                        </span>
+                    </div>
+                )}
                 <div className='container'>
                     <div className='row justify-center'>
                         <div className='w-full'>
@@ -221,25 +237,41 @@ const Course = () => {
                                                     aria-label='Default select example'
                                                 >
                                                     <option disabled>Select one</option>
-                                                    <option value='Back-end Developer'>
-                                                        Back-end Developer
+                                                    <option value='Backend Development'>
+                                                        Backend Development
                                                     </option>
-                                                    <option value='Data Scientist'>
-                                                        Data Scientist
+                                                    <option value='Data Science'>
+                                                        Data Science
                                                     </option>
                                                     <option value='DevOps Engineer'>
                                                         DevOps Engineer
                                                     </option>
-                                                    <option value='Front-end Developer'>
-                                                        Front-end Developer
+                                                    <option value='Frontend Development'>
+                                                        Frontend Development
                                                     </option>
-                                                    <option value='ML Engineer'>ML Engineer</option>
-                                                    <option value='Software Engineer'>
-                                                        Software Engineer
+                                                    <option value='Machine Learning'>
+                                                        Machine Learning
                                                     </option>
-                                                    <option value='Web Developer'>
-                                                        Web Developer
+                                                    <option value='Python Development'>
+                                                        Python Development
                                                     </option>
+                                                    <option value='Web Development'>
+                                                        Web Development
+                                                    </option>
+                                                    <option value='Cloud'>Cloud</option>
+                                                    <option value='React Development'>
+                                                        React Development
+                                                    </option>
+                                                    <option value='Quality Assurance Engineer'>
+                                                        Quality Assurance Engineer
+                                                    </option>
+                                                    <option value='Android Development'>
+                                                        Android Development
+                                                    </option>
+                                                    <option value='Graphic Design'>
+                                                        Graphic Design
+                                                    </option>
+                                                    <option value='Web Design'>Web Design</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -279,8 +311,7 @@ const Course = () => {
                                                     Expertise in selected category
                                                 </option>
                                                 <option value='Begineer'>Beginner</option>
-                                                <option value='Intermediate'>Intermediate</option>
-                                                <option value='Advanced'>Advanced</option>
+                                                <option value='Advanced'>Expert</option>
                                             </select>
                                         </div>
                                     </div>
