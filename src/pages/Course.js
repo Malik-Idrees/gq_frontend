@@ -134,6 +134,7 @@ const Course = () => {
                                                         </p>
                                                         <p className='mt-1 text-sm'>
                                                             {course.dailyTime}
+                                                            {' days'}
                                                         </p>
                                                     </div>
                                                 </div>
